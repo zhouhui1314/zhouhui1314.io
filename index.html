@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="个人主页 - 探索、创造与成长">
+    <title>个人主页 | 周辉</title>
+
+    <!-- ==================== 样式表 ==================== -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- ==================== 外部库 CDN ==================== -->
+    <!-- Three.js - 3D 场景渲染 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js" defer>
+    </script>
+    <!-- GSAP + ScrollTrigger - 滚动动画 -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer>
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer>
+    </script>
+
+    <!-- 【可选】开发者工具禁用库 - 如需启用请取消下面两行的注释 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/disable-devtool@0.3.7/disable-devtool.min.js" defer></script> -->
+
+    <!-- ==================== 主脚本 ==================== -->
+    <script src="main.js" defer></script>
+</head>
+<body class="theme-default">
+
+    <!-- ==================== 3D 背景画布 ==================== -->
+    <canvas id="three-bg" aria-hidden="true"></canvas>
+
+    <!-- ==================== 鼠标尾迹画布 ==================== -->
+    <canvas id="mouse-trail" aria-hidden="true"></canvas>
+
+    <div id="bg-gradient" aria-hidden="true"></div>
+    <div id="beat-flash" aria-hidden="true"></div>
+
+    <!-- ==================== 顶部导航栏 ==================== -->
+    <header class="top-nav" id="topNav">
+        <div class="nav-inner">
+            <a href="#hero" class="nav-logo" aria-label="回到顶部">ZH<span class="logo-dot">.</span></a>
+            <nav class="nav-links" aria-label="主导航">
+                <!-- 主页导航下拉 -->
+                <div class="nav-dropdown" id="navDropdown">
+                    <button class="nav-btn nav-dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                        主页导航
+                        <svg class="chevron-icon" width="12" height="7" viewBox="0 0 12 7" fill="none" aria-hidden="true">
+                            <path d="M1 1L6 5.5L11 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu" id="dropdownMenu" role="menu">
+                        <li role="none"><a href="#hero" role="menuitem" class="dropdown-link">🏠 欢迎首页</a></li>
+                        <li role="none"><a href="#message" role="menuitem" class="dropdown-link">💬 暖心留言</a></li>
+                        <li role="none"><a href="#beliefs" role="menuitem" class="dropdown-link">🌟 信念</a></li>
+                        <li role="none"><a href="#vision" role="menuitem" class="dropdown-link">🔭 未来展望</a></li>
+                        <li role="none"><a href="#projects" role="menuitem" class="dropdown-link">🧰 技术栈与成长</a></li>
+                        <li role="none"><a href="#contact" role="menuitem" class="dropdown-link">📬 联系方式</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ==================== 主内容区 ==================== -->
+    <main id="mainContent">
+
+        <!-- 区块1：欢迎首页 (Hero) -->
+        <section id="hero" class="section section-hero">
+            <div class="section-inner hero-inner">
+                <span class="hero-greeting animate-item">
+                    <span id="heroGreetingText"></span><span id="heroGreetingCaret" class="type-caret" aria-hidden="true"></span>
+                </span>
+                <h1 class="hero-title animate-item">
+                    <span id="heroTitlePrefix"></span><span id="heroTitleName" class="highlight"></span><span id="heroTitleCaret" class="type-caret" aria-hidden="true"></span>
+                </h1>
+                <p class="hero-subtitle animate-item">
+                    <span id="heroSubtitleText"></span><span id="heroSubtitleCaret" class="type-caret" aria-hidden="true"></span>
+                </p>
+                <p class="hero-desc animate-item">
+                    <span id="heroDescText"></span><span id="heroDescCaret" class="type-caret" aria-hidden="true"></span>
+                </p>
+                <p class="hero-signature animate-item" aria-label="个性签名">
+                    <span id="signatureLabel" class="signature-label"></span>
+                    <span id="signatureText" class="signature-text"></span><span id="signatureCaret" class="type-caret" aria-hidden="true"></span>
+                </p>
+                <div class="hero-cta animate-item">
+                    <a href="#projects" class="cta-btn cta-primary"><span id="heroCtaPrimaryText"></span><span id="heroCtaPrimaryCaret" class="type-caret" aria-hidden="true"></span></a>
+                    <a href="#contact" class="cta-btn cta-secondary"><span id="heroCtaSecondaryText"></span><span id="heroCtaSecondaryCaret" class="type-caret" aria-hidden="true"></span></a>
+                </div>
+                <!-- 滚动引导箭头 -->
+                <div class="scroll-indicator animate-item" aria-hidden="true">
+                    <span class="scroll-text"><span id="heroScrollText"></span><span id="heroScrollCaret" class="type-caret" aria-hidden="true"></span></span>
+                    <div class="scroll-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 5V19M12 19L6 13M12 19L18 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 区块2：暖心留言 -->
+        <section id="message" class="section section-message">
+            <div class="section-inner">
+                <div class="section-label animate-item">💬 暖心留言</div>
+                <blockquote class="message-quote animate-item">
+                    <p>"每一次尝试都是一次成长的机会。不要害怕失败，因为失败是通往成功的必经之路。保持好奇心，持续探索，你会发现自己比想象中更强大。"</p>
+                    <footer class="quote-author animate-item">— 致每一位追梦的你</footer>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- 区块3：信念 -->
+        <section id="beliefs" class="section section-beliefs">
+            <div class="section-inner">
+                <div class="section-label animate-item">🌟 信念</div>
+                <h2 class="section-heading animate-item">信念</h2>
+                <div class="beliefs-grid">
+                    <div class="belief-card animate-item">
+                        <span class="belief-icon">🔥</span>
+                        <h3>热爱</h3>
+                        <p>始于好奇，忠于内心。对所选择的方向保持纯粹的热忱，是驱动一切行动的原力。</p>
+                    </div>
+                    <div class="belief-card animate-item">
+                        <span class="belief-icon">🛡️</span>
+                        <h3>执着</h3>
+                        <p>面对困难不退缩，在反复打磨中寻找突破。执着不是固执，而是对正确事物的坚持。</p>
+                    </div>
+                    <div class="belief-card animate-item">
+                        <span class="belief-icon">🤝</span>
+                        <h3>承诺</h3>
+                        <p>言出必行，行必有果。对自己、对团队、对作品保持高度的责任感与交付意识。</p>
+                    </div>
+                    <div class="belief-card animate-item">
+                        <span class="belief-icon">🌟</span>
+                        <h3>理想</h3>
+                        <p>不局限于技术，更关乎想成为什么样的人。不断向上生长，让理想照进现实。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 区块4：未来展望 -->
+        <section id="vision" class="section section-vision">
+            <div class="section-inner">
+                <div class="section-label animate-item">🔭 未来展望</div>
+                <h2 class="section-heading animate-item">为热爱的事，奉献终身。</h2>
+                <div class="vision-content">
+                    <p class="vision-text animate-item">保持对世界的探索欲，让兴趣成为最好的老师，在持续的技术提升中，把每一个想法变成现实。不做设限者，只做前行人。</p>
+                    <div class="vision-tags animate-item">
+                        <span class="vision-tag">探索</span>
+                        <span class="vision-tag">兴趣</span>
+                        <span class="vision-tag">技术提升</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 区块5：技术栈与成长 -->
+        <section id="projects" class="section section-projects">
+            <div class="section-inner">
+                <div class="block5-wrap">
+                    <div class="block5-skill">
+                        <div class="section-label animate-item">🧰 技术栈</div>
+                        <h2 class="section-heading animate-item">技术栈 / 技能雷达</h2>
+                        <div class="block5-skill-grid" role="list" aria-label="技术栈与熟练度">
+                            <div class="block5-skill-card" role="listitem" data-p="88">
+                                <div class="block5-skill-head">
+                                    <div class="block5-skill-left">
+                                        <span class="block5-skill-icon" aria-hidden="true">⚙️</span>
+                                        <span class="block5-skill-name">C/C++</span>
+                                    </div>
+                                </div>
+                                <div class="block5-skill-details">
+                                    <div class="block5-skill-meta">
+                                        <div class="block5-skill-progress" aria-label="熟练度 70%"><span class="block5-skill-progress-text">★★★★☆</span></div>
+                                        <div class="block5-skill-thumb" role="img" aria-label="作品缩略图">🚗</div>
+                                        <div class="block5-skill-highlight">更偏底层与性能：稳定、可控、可调试。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-skill-card" role="listitem" data-p="86">
+                                <div class="block5-skill-head">
+                                    <div class="block5-skill-left">
+                                        <span class="block5-skill-icon" aria-hidden="true">🐍</span>
+                                        <span class="block5-skill-name">Python</span>
+                                    </div>
+                                </div>
+                                <div class="block5-skill-details">
+                                    <div class="block5-skill-meta">
+                                        <div class="block5-skill-progress" aria-label="熟练度 80%"><span class="block5-skill-progress-text">★★★★☆</span></div>
+                                        <div class="block5-skill-thumb" role="img" aria-label="作品缩略图">🧪</div>
+                                        <div class="block5-skill-highlight">用脚本把重复工作“自动化消灭”。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-skill-card" role="listitem" data-p="84">
+                                <div class="block5-skill-head">
+                                    <div class="block5-skill-left">
+                                        <span class="block5-skill-icon" aria-hidden="true">🌐</span>
+                                        <span class="block5-skill-name">HTML/CSS/JS</span>
+                                    </div>
+                                </div>
+                                <div class="block5-skill-details">
+                                    <div class="block5-skill-meta">
+                                        <div class="block5-skill-progress" aria-label="熟练度 40%"><span class="block5-skill-progress-text">★★☆☆☆</span></div>
+                                        <div class="block5-skill-thumb" role="img" aria-label="作品缩略图">✨</div>
+                                        <div class="block5-skill-highlight">把交互与视觉做“顺滑”，更像产品。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-skill-card" role="listitem" data-p="82">
+                                <div class="block5-skill-head">
+                                    <div class="block5-skill-left">
+                                        <span class="block5-skill-icon" aria-hidden="true">🔧</span>
+                                        <span class="block5-skill-name">Git</span>
+                                    </div>
+                                </div>
+                                <div class="block5-skill-details">
+                                    <div class="block5-skill-meta">
+                                        <div class="block5-skill-progress" aria-label="熟练度 30%"><span class="block5-skill-progress-text">★★☆☆☆</span></div>
+                                        <div class="block5-skill-thumb" role="img" aria-label="作品缩略图">🧩</div>
+                                        <div class="block5-skill-highlight">用分支策略与规范提交把协作变简单。</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-skill-card" role="listitem" data-p="87">
+                                <div class="block5-skill-head">
+                                    <div class="block5-skill-left">
+                                        <span class="block5-skill-icon" aria-hidden="true">📟</span>
+                                        <span class="block5-skill-name">嵌入式</span>
+                                    </div>
+                                </div>
+                                <div class="block5-skill-details">
+                                    <div class="block5-skill-meta">
+                                        <div class="block5-skill-progress" aria-label="熟练度 87%"><span class="block5-skill-progress-text">★★★★☆</span></div>
+                                        <div class="block5-skill-thumb" role="img" aria-label="作品缩略图">📡</div>
+                                        <div class="block5-skill-highlight">现场问题定位：先复现，再缩小，再解决。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="block5-timeline">
+                        <div class="section-label animate-item">🧭 成长</div>
+                        <h2 class="section-heading animate-item">成长之路</h2>
+                        <div class="block5-timeline-list" aria-label="成长时间线">
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-0">
+                                    <span class="block5-timeline-date">2000.07</span>
+                                    <span class="block5-timeline-title">出生</span>
+                                    <span class="block5-timeline-brief">起点：对世界保持好奇。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-0" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>从这里开始，兴趣驱动学习，习惯把问题拆开、一步步解决。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-1">
+                                    <span class="block5-timeline-date">2019.09</span>
+                                    <span class="block5-timeline-title">进入武汉科技大学</span>
+                                    <span class="block5-timeline-brief">系统学习基础与工程方法。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-1" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>学习计算机基础与工程实践，开始形成“能跑、可读、可维护”的编程习惯。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-2">
+                                    <span class="block5-timeline-date">2022.02</span>
+                                    <span class="block5-timeline-title">智能小车落地</span>
+                                    <span class="block5-timeline-brief">第一个独立项目从 0 到 1。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-2" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>完成控制逻辑、传感器融合与联调，积累“边跑边测、快速迭代”的项目经验。</p>
+                                        <a class="block5-timeline-link" href="#contact">查看/交流项目细节</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-3">
+                                    <span class="block5-timeline-date">2023.06</span>
+                                    <span class="block5-timeline-title">宁波迦南电气股份有限公司</span>
+                                    <span class="block5-timeline-brief">接触完整开发流程与交付。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-3" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>参与需求—开发—联调—交付全流程，强化工程规范与问题闭环能力。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-4">
+                                    <span class="block5-timeline-date">2025.06.16</span>
+                                    <span class="block5-timeline-title">迈测科技</span>
+                                    <span class="block5-timeline-brief">从事激光测距相关工作。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-4" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>面向设备与算法场景进行联调与验证，关注精度、稳定性与现场可用性。</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="block5-timeline-item">
+                                <button class="block5-timeline-node" type="button" aria-expanded="false" aria-controls="block5-tl-5">
+                                    <span class="block5-timeline-date">现在</span>
+                                    <span class="block5-timeline-title">持续学习</span>
+                                    <span class="block5-timeline-brief">保持探索，持续迭代自己。</span>
+                                </button>
+                                <div class="block5-timeline-drawer" id="block5-tl-5" hidden>
+                                    <div class="block5-timeline-drawer-inner">
+                                        <p>用项目驱动学习，用复盘沉淀能力，让热爱持续发光。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 区块6：联系方式 -->
+        <section id="contact" class="section section-contact">
+            <div class="section-inner">
+                <div class="section-label animate-item">📬 联系方式</div>
+                <h2 class="section-heading animate-item">期待与你交流</h2>
+                <div class="contact-list">
+                    <a href="mailto:1932156968@qq.com" class="contact-item animate-item">
+                        <span class="contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                                <path d="M2 6L12 13L22 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="contact-label">邮箱</span>
+                        <span class="contact-value">1932156968@qq.com</span>
+                    </a>
+                    <a href="tel:15750999199" class="contact-item animate-item">
+                        <span class="contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M22 16.92V21a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3 5.18 2 2 0 0 1 5 3h4.09a2 2 0 0 1 2 1.72c.12.86.3 1.7.54 2.52a2 2 0 0 1-.45 2.11L9.91 10.91a16 16 0 0 0 3.18 3.18l1.56-1.27a2 2 0 0 1 2.11-.45c.82.24 1.66.42 2.52.54A2 2 0 0 1 22 16.92Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="contact-label">电话</span>
+                        <span class="contact-value">15750999199</span>
+                    </a>
+                    <a href="https://wpa.qq.com/msgrd?v=3&uin=1932156968&site=qq&menu=yes" class="contact-item animate-item" target="_blank" rel="noopener noreferrer">
+                        <span class="contact-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                <path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5c-1.1 0-2.16-.2-3.14-.58L3 21l1.58-6.36A8.5 8.5 0 1 1 21 11.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </span>
+                        <span class="contact-label">QQ</span>
+                        <span class="contact-value">1932156968</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== 页脚 ==================== -->
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <p class="footer-text">&copy; <span id="currentYear">2024</span> 周辉. All rights reserved.</p>
+            <p class="footer-sub">用 ❤️ 与代码构建 · 部署于静态托管服务</p>
+        </div>
+    </footer>
+
+    <!-- ==================== 背景音乐控制按钮 ==================== -->
+    <button class="music-toggle" id="musicToggle" aria-label="播放背景音乐" title="播放背景音乐">
+        <svg class="music-icon music-icon-off" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+            <!-- 静音斜线 -->
+            <line x1="2" y1="2" x2="22" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <svg class="music-icon music-icon-on" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="display:none;">
+            <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+            <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <button class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换主题">
+        <svg class="theme-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v2.5M12 18.5V21M4.22 4.22l1.77 1.77M18.01 18.01l1.77 1.77M3 12h2.5M18.5 12H21M4.22 19.78l1.77-1.77M18.01 5.99l1.77-1.77" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="currentColor" stroke-width="2"/>
+        </svg>
+    </button>
+
+    <!-- ==================== 背景音频元素 ==================== -->
+    <!--
+    ⚠️ 音频占位说明：
+    请将 src 替换为你自己的背景音乐文件路径（支持 .mp3 / .ogg / .wav）
+    推荐使用无版权音乐，如从 Pixabay Music 或 Uppbeat 获取
+    -->
+    <audio id="bgMusic" loop preload="metadata" playsinline>
+        <source src="./assets/xy.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- ==================== 移动端跳转弹窗 ==================== -->
+    <div class="mobile-redirect-modal" id="mobileRedirectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
+        <div class="modal-backdrop"></div>
+        <div class="modal-content">
+            <div class="modal-icon">📱</div>
+            <h3 id="modalTitle">检测到移动设备</h3>
+            <p>我们为您准备了适配移动端的版本，体验更佳。是否跳转？</p>
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-primary" id="btnGoMobile">前往移动版</button>
+                <button class="modal-btn modal-btn-secondary" id="btnStayDesktop">继续访问桌面版</button>
+            </div>
+            <p class="modal-hint">选择"继续访问桌面版"后，本次将不再提示</p>
+        </div>
+    </div>
+
+</body>
+</html>
+
